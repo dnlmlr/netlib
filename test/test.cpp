@@ -57,7 +57,7 @@ TEST_CASE("Test IpAddr automatic version") {
     bool raw_ip_equal = true;
     for (auto i = 0; i < 16; i++)
     {
-        if (ipv6.raw_addr.v6.__in6_u.__u6_addr8[i] != addrV6bytes[i] )
+        if (((uint8_t*)&ipv6.raw_addr.v6)[i] != addrV6bytes[i] )
             raw_ip_equal = false;
     }
 
@@ -185,7 +185,7 @@ TEST_CASE("Test SockAddr from raw_sockaddr") {
 
     raw6.sin6_family = AF_INET6;
     raw6.sin6_port = htons(1337);
-    memcpy(&raw6.sin6_addr.__in6_u.__u6_addr8[0], ip6_bytes, 16);
+    memcpy(&raw6.sin6_addr, ip6_bytes, 16);
 
     SockAddr sa6((sockaddr*) &raw6, IpAddr::Type::V6);
 

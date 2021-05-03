@@ -1,0 +1,24 @@
+image: alpine
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+pages:
+  script:
+  - apk update && apk add doxygen ttf-freefont graphviz
+  - doxygen 
+  - mv docs/html/ public/
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
+
+run tests:
+  script:
+  - apk update && apk add g++ make cmake
+  - cd build
+  - cmake ..
+  - make test
+  only:
+  - master

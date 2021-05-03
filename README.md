@@ -13,6 +13,12 @@ Instead Ip-Addresses are simply specified as `string` and ports as `uint16_t`
 (in host byte order). All the conversions and Ipv4/Ipv6 differences are handled 
 behind the scenes.
 
+## Documentation
+
+Doxygen documentation of the public API is available on [gitlab-pages](https://istddmue2.h-da.io/netlib). 
+
+Some examples using the library are available in the `example` subdirectory.
+
 ## Usage
 
 This library can be used in many different ways. The most simple of which would 
