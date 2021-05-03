@@ -1,0 +1,6 @@
+/.vscode/*
+/build/*
+docs/*
+
+# Dont't ignore .gitkeep
+!.gitkeep
