@@ -1,6 +1,8 @@
 #ifndef _TCPSTREAM_HPP
 #define _TCPSTREAM_HPP
 
+#include <string>
+
 #include "sockaddr.hpp"
 
 /**
@@ -118,6 +120,16 @@ public:
      * @return The number of bytes that were actually sent over the connection.
      */
     void sendAll(const void *data, size_t len);
+
+    /**
+     * @brief Send the given string data over the tcp connection. The function 
+     * send all chars of the given string.
+     * 
+     * If the sending fails, an exception is thrown.
+     * 
+     * @param str The string that will be sent.
+     */
+    void sendAllString(const std::string &str);
 
     /**
      * @brief Receive a maximum of len bytes of data from the tcp connection. It 

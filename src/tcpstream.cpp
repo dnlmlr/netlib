@@ -113,6 +113,11 @@ void TcpStream::sendAll(const void *data, size_t len)
     }
 }
 
+void TcpStream::sendAllString(const std::string &str)
+{
+    sendAll(str.c_str(), str.size());
+}
+
 ssize_t TcpStream::read(void *data, size_t len)
 {
     if (sockfd == 0)
