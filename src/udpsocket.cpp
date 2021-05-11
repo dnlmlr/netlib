@@ -4,6 +4,7 @@
 
 #include <unistd.h>
 #include <sys/socket.h>
+#include <poll.h>
 
 
 UdpSocket::UdpSocket(SockAddr _local)
@@ -93,9 +94,10 @@ ssize_t UdpSocket::sendTo(const std::string &remoteAddrPort, const void *data, s
 ssize_t UdpSocket::receive(void *data, size_t len, SockAddr &remote)
 {
     SockAddr::RawSockAddr remote_raw_saddr = {0};
+    socklen_t remote_raw_socklen = raw_socklen;
 
     // TODO: Lookup flags
-    ssize_t bytes_read = ::recvfrom(sockfd, data, len, 0, &remote_raw_saddr.generic, &raw_socklen);
+    ssize_t bytes_read = ::recvfrom(sockfd, data, len, 0, &remote_raw_saddr.generic, &remote_raw_socklen);
 
     if (bytes_read < 0)
     {
@@ -109,17 +111,49 @@ ssize_t UdpSocket::receive(void *data, size_t len, SockAddr &remote)
 
 ssize_t UdpSocket::receive(void *data, size_t len)
 {
+    SockAddr saddr;
+    return receive(data, len, saddr);
+}
+
+ssize_t UdpSocket::receiveTimeout(void *data, size_t len, SockAddr &remote, int timeoutMs)
+{
     SockAddr::RawSockAddr remote_raw_saddr = {0};
+    socklen_t remote_raw_socklen = raw_socklen;
+
+    pollfd pfd = {0};
+    pfd.fd = sockfd;
+    pfd.events = POLLIN;
+    
+    // block until data is available or the timeout is reached
+    int res = poll(&pfd, 1, timeoutMs);
+
+    // a timout occured
+    if (res == 0) return 0;
+
+    // a poll error occured
+    if (res < 0)
+    {
+        close();
+        throw std::runtime_error("Error while reading from socket");
+    }
 
     // TODO: Lookup flags
-    ssize_t bytes_read = ::recvfrom(sockfd, data, len, 0, &remote_raw_saddr.generic, &raw_socklen);
+    ssize_t bytes_read = ::recvfrom(sockfd, data, len, 0, &remote_raw_saddr.generic, &remote_raw_socklen);
 
     if (bytes_read < 0)
     {
         throw std::runtime_error("Error while reading from socket");
     }
 
+    remote = SockAddr(&remote_raw_saddr.generic, local.address.type);
+
     return bytes_read;
+}
+
+ssize_t UdpSocket::receiveTimeout(void *data, size_t len, int timeoutMs)
+{
+    SockAddr saddr;
+    return receiveTimeout(data, len, saddr, timeoutMs);
 }
 
 void UdpSocket::close()

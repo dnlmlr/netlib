@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <poll.h>
 
 TcpStream::TcpStream(SockAddr _remote)
     : remote{_remote}, sockfd{0}
@@ -140,6 +141,81 @@ ssize_t TcpStream::readAll(void *data, size_t len)
     size_t bytesReadTotal = 0;
     while (true)
     {
+        ssize_t bytesRead = ::read(sockfd, (uint8_t*)data + bytesReadTotal, len-bytesReadTotal);
+
+        if (bytesRead == 0) break;
+        if (bytesRead < 0)
+        {
+            close();
+            throw std::runtime_error("Error while reading from socket");
+        }
+
+        bytesReadTotal += bytesRead;
+    }
+    return bytesReadTotal;
+}
+
+ssize_t TcpStream::readTimeout(void *data, size_t len, int timeoutMs)
+{
+    if (timeoutMs <= 0) return read(data, len);
+
+    if (sockfd == 0)
+        throw std::runtime_error("Can't read from closed socket");
+
+    pollfd pfd = {0};
+    pfd.fd = sockfd;
+    pfd.events = POLLIN;
+    
+    // block until data is available or the timeout is reached
+    int res = poll(&pfd, 1, timeoutMs);
+
+    // a timout occured
+    if (res == 0) return 0;
+
+    // a poll error occured
+    if (res < 0)
+    {
+        close();
+        throw std::runtime_error("Error while reading from socket");
+    }
+
+    ssize_t bytes_read = ::read(sockfd, data, len);
+    if (bytes_read < 0)
+    {
+        close();
+        throw std::runtime_error("Error while reading from socket");
+    }
+    return bytes_read;
+}
+
+ssize_t TcpStream::readAllTimeout(void *data, size_t len, int timeoutMs)
+{
+    if (timeoutMs <= 0) return readAll(data, len);
+
+    if (sockfd == 0)
+        throw std::runtime_error("Can't read from closed socket");
+    
+    pollfd pfd = {0};
+    pfd.fd = sockfd;
+    pfd.events = POLLIN;
+    
+    
+    size_t bytesReadTotal = 0;
+    while (true)
+    {
+        // block until data is available or the timeout is reached
+        int res = poll(&pfd, 1, timeoutMs);
+
+        // a timout occured
+        if (res == 0) return -1 * bytesReadTotal;
+
+        // a poll error occured
+        if (res < 0)
+        {
+            close();
+            throw std::runtime_error("Error while reading from socket");
+        }
+
         ssize_t bytesRead = ::read(sockfd, (uint8_t*)data + bytesReadTotal, len-bytesReadTotal);
 
         if (bytesRead == 0) break;

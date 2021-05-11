@@ -138,7 +138,7 @@ public:
      * @param remote A reference to a SockAddr that is used to store the origin 
      * of the UDP packet.
      * 
-     * @return The numbe of bytes that were actually copied.
+     * @return The number of bytes that were actually copied.
      */
     ssize_t receive(void *data, size_t len, SockAddr &remote);
 
@@ -150,9 +150,41 @@ public:
      * will be copied.
      * @param len The maximum number of bytes that can be copied into data.
      * 
-     * @return The numbe of bytes that were actually copied.
+     * @return The number of bytes that were actually copied.
      */
     ssize_t receive(void *data, size_t len);
+
+    /**
+     * @brief Receive a UDP packet and copy a maximum number of len bytes from 
+     * the packet payload into data. Store the senders origin socket address 
+     * into remote. If the timeout occurs, 0 is returned. 
+     * 
+     * @param data Pointer to at least len bytes of data in which the payload 
+     * will be copied.
+     * @param len The maximum number of bytes that can be copied into data.
+     * @param remote A reference to a SockAddr that is used to store the origin 
+     * of the UDP packet.
+     * @param timeoutMs The number of milliseconds before a timeout occurs. 
+     * 
+     * @return The number of bytes that were actually copied, or 0 if a timeout
+     * occured.
+     */
+    ssize_t receiveTimeout(void *data, size_t len, SockAddr &remote, int timeoutMs);
+
+    /**
+     * @brief Receive a UDP packet and copy a maximum number of len bytes from 
+     * the packet payload into data. The packets origin is not stored. If the 
+     * timeout occurs, 0 is returned. 
+     * 
+     * @param data Pointer to at least len bytes of data in which the payload 
+     * will be copied.
+     * @param len The maximum number of bytes that can be copied into data.
+     * @param timeoutMs The number of milliseconds before a timeout occurs. 
+     * 
+     * @return The number of bytes that were actually copied, or 0 if a timeout
+     * occured.
+     */
+    ssize_t receiveTimeout(void *data, size_t len, int timeoutMs);
 
     /**
      * @brief Check if the socket is closed or open. Open in this case means 

@@ -168,6 +168,46 @@ public:
     ssize_t readAll(void *data, size_t len);
 
     /**
+     * @brief Same as TcpStream::read but with a millisecond timeout. If the 
+     * timeout is reached without receiving data, 0 is returned.
+     * 
+     * If receiving fails, an exception is thrown.
+     * 
+     * @param data Pointer to at least len bytes where the data received over  
+     * the tcp connection will be stored.
+     * @param len The maxiumum number of bytes that will be received over the 
+     * tcp connection.
+     * @param timeoutMs The number of milliseconds before a timeout occurs. 
+     * 
+     * @return The number of bytes that were actually received over the 
+     * connection. This can be less than len. If a timeout occurs 0 is 
+     * returned.
+     */
+    ssize_t readTimeout(void *data, size_t len, int timeoutMs);
+
+    /**
+     * @brief Same as TcpStream::readAll but with a millisecond timeout. If 
+     * the timeout is reached without receiving any data, 0 is returned. If 
+     * the timout occurs after receiving some data, the number of bytes 
+     * received before the timeout is returned as NEGATIVE. The timeout 
+     * starts from the begining if partial data is received.
+     * 
+     * If receiving failed an exception is thrown.
+     * 
+     * @param data Pointer to at least len bytes where the data received over  
+     * the tcp connection will be stored.
+     * @param len The number of bytes that will be received over the tcp 
+     * connection.
+     * @param timeoutMs The number of milliseconds before a timeout occurs.
+     *  
+     * @return The number of bytes that were actually received over the 
+     * connection. This can be less than len if the connection is closed.
+     * If a timout occurs after some data was already read, the number of 
+     * bytes is returned as negative.
+     */
+    ssize_t readAllTimeout(void *data, size_t len, int timeoutMs);
+
+    /**
      * @brief Get the socket address of the connection target.
      * 
      * @return The connection targets socket address.
