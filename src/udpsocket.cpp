@@ -7,6 +7,10 @@
 #include <poll.h>
 
 
+UdpSocket::UdpSocket()
+    : UdpSocket{"0.0.0.0", 0}
+{ }
+
 UdpSocket::UdpSocket(SockAddr _local)
     : local{_local}, sockfd{0}
 {

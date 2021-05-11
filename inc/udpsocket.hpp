@@ -36,6 +36,13 @@ private:
 public:
 
     /**
+     * @brief Create a UdpSocket that will be bound to Ipv4 0.0.0.0 and the 
+     * port 0. This will use a random free port and is useful for sending 
+     * only.
+     */
+    UdpSocket();
+
+    /**
      * @brief Create a UdpSocket that will be bound to the local address and 
      * port that is specified in the SockAddr. 
      * If the socket is only used to send UDP packets, the "any" address 
