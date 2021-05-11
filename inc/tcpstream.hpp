@@ -107,6 +107,19 @@ public:
     ssize_t send(const void *data, size_t len);
 
     /**
+     * @brief Send exactly len bytes of data into the tcp connection.
+     * 
+     * If sending fails, an exception is thrown.
+     * 
+     * @param data Pointer to at least len bytes that will be sent over the 
+     * tcp connection.
+     * @param len The number of bytes that will be sent over the tcp connection.
+     *  
+     * @return The number of bytes that were actually sent over the connection.
+     */
+    void sendAll(const void *data, size_t len);
+
+    /**
      * @brief Receive a maximum of len bytes of data from the tcp connection. It 
      * is possible that less than len bytes are received. This call will block 
      * until at least byte can be received or the connection terminates.
@@ -122,6 +135,25 @@ public:
      * connection. This can be less than len.
      */
     ssize_t read(void *data, size_t len);
+
+    /**
+     * @brief Read exactly len bytes from the tcp stream. If the connection is
+     * closed before len bytes are read, the number of bytes actually read is 
+     * returned. This will block until exactly len bytes are read or the 
+     * connection is closed.
+     * 
+     * If receiving failed or the connection is closed before at least one 
+     * byte was received, an exception is thrown.
+     * 
+     * @param data Pointer to at least len bytes where the data received over  
+     * the tcp connection will be stored.
+     * @param len The number of bytes that will be received over the tcp 
+     * connection.
+     *  
+     * @return The number of bytes that were actually received over the 
+     * connection. This can be less than len if the connection is closed.
+     */
+    ssize_t readAll(void *data, size_t len);
 
     /**
      * @brief Get the socket address of the connection target.

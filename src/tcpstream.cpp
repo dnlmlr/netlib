@@ -92,6 +92,27 @@ ssize_t TcpStream::send(const void *data, size_t len)
     return bytes_sent;
 }
 
+void TcpStream::sendAll(const void *data, size_t len)
+{
+    if (sockfd == 0)
+        throw std::runtime_error("Can't write to closed socket");
+    
+    size_t bytesSentTotal = 0;
+
+    while (bytesSentTotal < len)
+    {
+        ssize_t bytesSent = ::write(sockfd, (uint8_t*)data + bytesSentTotal, len-bytesSentTotal);
+
+        if (bytesSent < 0)
+        {
+            close();
+            throw std::runtime_error("Error while writing to socket");
+        }
+
+        bytesSentTotal += bytesSent;
+    }
+}
+
 ssize_t TcpStream::read(void *data, size_t len)
 {
     if (sockfd == 0)
@@ -104,6 +125,28 @@ ssize_t TcpStream::read(void *data, size_t len)
         throw std::runtime_error("Error while reading from socket");
     }
     return bytes_read;
+}
+
+ssize_t TcpStream::readAll(void *data, size_t len)
+{
+    if (sockfd == 0)
+        throw std::runtime_error("Can't read from closed socket");
+    
+    size_t bytesReadTotal = 0;
+    while (true)
+    {
+        ssize_t bytesRead = ::read(sockfd, (uint8_t*)data + bytesReadTotal, len-bytesReadTotal);
+
+        if (bytesRead == 0) break;
+        if (bytesRead < 0)
+        {
+            close();
+            throw std::runtime_error("Error while reading from socket");
+        }
+
+        bytesReadTotal += bytesRead;
+    }
+    return bytesReadTotal;
 }
 
 const SockAddr & TcpStream::getRemoteAddr() const
