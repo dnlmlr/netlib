@@ -78,12 +78,12 @@ public:
     TcpListener& operator=(TcpListener &&other);
 
     /**
-     * @brief Copying TcpListener is not allowed.
+     * @brief Copying TcpListener is not allowed. See clone() for explicit copies.
      */
     TcpListener(const TcpListener &other) = delete;
 
     /**
-     * @brief Copying TcpListener is not allowed.
+     * @brief Copying TcpListener is not allowed. See clone() for explicit copies.
      */
     TcpListener& operator=(const TcpListener &other) = delete;
 
@@ -119,6 +119,27 @@ public:
      * longer be used without calling listen again.
      */
     void close();
+
+    /**
+     * @brief Set the behavior for when the TcpListener is destroyed. If autoclose
+     * is enabled, the socket is closed on destruct. If autoclose is disabled, the
+     * socket will not be closed automatically.
+     * 
+     * @param autoclose Enable or disable the autoclose functionality.
+     */
+    void setAutoclose(bool autoclose);
+
+    /**
+     * @brief Create a clone of this socket wrapper object. The clone and the 
+     * original will share the same underlying socket and file descriptor. 
+     * If one of the instances closes the socket, the socket will be closed 
+     * for both. The other instance will not be notified about this, but instead
+     * socket operations will just fail. Due to this, it might be a good idea to  
+     * disabel autoclose and manually close the socket.
+     * 
+     * @return A clone of this TcpListener that shares the same underlying socket.
+     */
+    TcpListener clone();
 
 };
 

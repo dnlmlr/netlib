@@ -260,3 +260,17 @@ bool TcpStream::isClosed() const
 {
     return sockfd == 0;
 }
+
+void TcpStream::setAutoclose(bool _autoclose)
+{
+    autoclose = _autoclose;
+}
+
+TcpStream TcpStream::clone()
+{
+    TcpStream other{remote};
+    other.sockfd = sockfd;
+    other.autoclose = autoclose;
+
+    return other;
+}

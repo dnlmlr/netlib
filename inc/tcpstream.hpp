@@ -80,12 +80,12 @@ public:
     TcpStream& operator=(TcpStream &&other);
 
     /**
-     * @brief Copying TcpListener is not allowed.
+     * @brief Copying TcpListener is not allowed. See clone() for explicit copies.
      */
     TcpStream(const TcpStream &other) = delete;
 
     /**
-     * @brief Copying TcpListener is not allowed.
+     * @brief Copying TcpListener is not allowed. See clone() for explicit copies.
      */
     TcpStream& operator=(const TcpStream &other) = delete;
 
@@ -230,6 +230,27 @@ public:
      * @return True if the socket was not yet opened, or if it has been closed.
      */
     bool isClosed() const;
+
+    /**
+     * @brief Set the behavior for when the TcpStream is destroyed. If autoclose
+     * is enabled, the socket is closed on destruct. If autoclose is disabled, the
+     * socket will not be closed automatically.
+     * 
+     * @param autoclose Enable or disable the autoclose functionality.
+     */
+    void setAutoclose(bool autoclose);
+
+    /**
+     * @brief Create a clone of this socket wrapper object. The clone and the 
+     * original will share the same underlying socket and file descriptor. 
+     * If one of the instances closes the socket, the socket will be closed 
+     * for both. The other instance will not be notified about this, but instead
+     * socket operations will just fail. Due to this, it might be a good idea to  
+     * disabel autoclose and manually close the socket.
+     * 
+     * @return A clone of this TcpStream that shares the same underlying socket.
+     */
+    TcpStream clone();
 
     friend class TcpListener;
 

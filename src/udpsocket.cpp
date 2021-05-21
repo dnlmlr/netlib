@@ -191,3 +191,20 @@ void UdpSocket::close()
     }
     sockfd = 0;
 }
+
+void UdpSocket::setAutoclose(bool _autoclose)
+{
+    autoclose = _autoclose;
+}
+
+UdpSocket UdpSocket::clone()
+{
+    UdpSocket other;
+    other.local = local;
+    other.sockfd = sockfd;
+    other.raw_socklen = raw_socklen;
+    other.address_family = address_family;
+    other.autoclose = autoclose;
+
+    return other;
+}

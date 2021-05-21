@@ -130,3 +130,17 @@ void TcpListener::close()
 
     sockfd = 0;
 }
+
+void TcpListener::setAutoclose(bool _autoclose)
+{
+    autoclose = _autoclose;
+}
+
+TcpListener TcpListener::clone()
+{
+    TcpListener other{local};
+    other.sockfd = sockfd;
+    other.autoclose = autoclose;
+
+    return other;
+}
