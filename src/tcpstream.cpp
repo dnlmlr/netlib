@@ -266,7 +266,7 @@ void TcpStream::setAutoclose(bool _autoclose)
     autoclose = _autoclose;
 }
 
-TcpStream TcpStream::clone()
+TcpStream TcpStream::clone() const
 {
     TcpStream other{remote};
     other.sockfd = sockfd;

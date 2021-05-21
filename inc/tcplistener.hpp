@@ -139,7 +139,7 @@ public:
      * 
      * @return A clone of this TcpListener that shares the same underlying socket.
      */
-    TcpListener clone();
+    TcpListener clone() const;
 
 };
 

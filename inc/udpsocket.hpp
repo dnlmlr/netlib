@@ -236,7 +236,7 @@ public:
      * 
      * @return A clone of this UdpSocket that shares the same underlying socket.
      */
-    UdpSocket clone();
+    UdpSocket clone() const;
 
 };
 

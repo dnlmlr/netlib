@@ -136,7 +136,7 @@ void TcpListener::setAutoclose(bool _autoclose)
     autoclose = _autoclose;
 }
 
-TcpListener TcpListener::clone()
+TcpListener TcpListener::clone() const
 {
     TcpListener other{local};
     other.sockfd = sockfd;

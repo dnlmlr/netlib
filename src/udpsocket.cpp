@@ -197,7 +197,7 @@ void UdpSocket::setAutoclose(bool _autoclose)
     autoclose = _autoclose;
 }
 
-UdpSocket UdpSocket::clone()
+UdpSocket UdpSocket::clone() const
 {
     UdpSocket other;
     other.local = local;

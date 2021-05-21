@@ -250,7 +250,7 @@ public:
      * 
      * @return A clone of this TcpStream that shares the same underlying socket.
      */
-    TcpStream clone();
+    TcpStream clone() const;
 
     friend class TcpListener;
 
