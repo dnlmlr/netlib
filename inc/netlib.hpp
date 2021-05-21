@@ -7,5 +7,6 @@
 #include "tcplistener.hpp"
 #include "udpsocket.hpp"
 #include "resolver.hpp"
+#include "sockcopy.hpp"
 
 #endif // _NETLIB_HPP
