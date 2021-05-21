@@ -30,6 +30,11 @@ private:
      */
     int sockfd;
 
+    /**
+     * @brief If set to true, the socket is automatically closed on destruction
+     */
+    bool autoclose = false;
+
 public:
 
     /**
@@ -71,8 +76,8 @@ public:
      */
     ~TcpStream();
 
-    TcpStream(TcpStream &&other) = default;
-    TcpStream& operator=(TcpStream &&other) = default;
+    TcpStream(TcpStream &&other);
+    TcpStream& operator=(TcpStream &&other);
 
     /**
      * @brief Copying TcpListener is not allowed.

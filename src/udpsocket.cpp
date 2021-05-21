@@ -45,7 +45,29 @@ UdpSocket::UdpSocket(const std::string &localAddressPort)
 
 UdpSocket::~UdpSocket()
 {
-    close();
+    if (autoclose) close();
+}
+
+UdpSocket::UdpSocket(UdpSocket &&other)
+    : local{other.local}, sockfd{other.sockfd}, raw_socklen{other.raw_socklen}, 
+        address_family{other.address_family}, autoclose{other.autoclose}
+{
+    // Invalidate the moved from socket
+    other.sockfd = 0;
+}
+
+UdpSocket& UdpSocket::operator=(UdpSocket &&other)
+{
+    local = other.local;
+    sockfd = other.sockfd;
+    raw_socklen = other.raw_socklen;
+    address_family = other.address_family;
+    autoclose = other.autoclose;
+
+    // Invalidate the moved from socket
+    other.sockfd = 0;
+
+    return *this;
 }
 
 void UdpSocket::bind()

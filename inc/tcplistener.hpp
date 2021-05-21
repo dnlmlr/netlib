@@ -29,6 +29,11 @@ private:
      */
     int sockfd;
 
+    /**
+     * @brief If set to true, the socket is automatically closed on destruction
+     */
+    bool autoclose = false;
+
 public:
 
     /**
@@ -69,8 +74,8 @@ public:
      */
     ~TcpListener();
 
-    TcpListener(TcpListener &&other) = default;
-    TcpListener& operator=(TcpListener &&other) = default;
+    TcpListener(TcpListener &&other);
+    TcpListener& operator=(TcpListener &&other);
 
     /**
      * @brief Copying TcpListener is not allowed.

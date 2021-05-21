@@ -37,6 +37,11 @@ private:
      */
     int address_family;
 
+    /**
+     * @brief If set to true, the socket is automatically closed on destruction
+     */
+    bool autoclose = false;
+
 public:
 
     /**
@@ -88,8 +93,9 @@ public:
      */
     ~UdpSocket();
 
-    UdpSocket(UdpSocket &&other) = default;
-    UdpSocket& operator=(UdpSocket &&other) = default;
+    UdpSocket(UdpSocket &&other);
+
+    UdpSocket& operator=(UdpSocket &&other);
 
     /**
      * @brief Copying UdpSocket is not allowed.

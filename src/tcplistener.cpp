@@ -28,7 +28,26 @@ TcpListener::TcpListener(const std::string &localAddressPort)
 TcpListener::~TcpListener()
 {
     // Close the socket to prevent leaking open file descriptors
-    close();
+    if (autoclose) close();
+}
+
+TcpListener::TcpListener(TcpListener &&other)
+    : local{other.local}, sockfd{other.sockfd}, autoclose{other.autoclose}
+{
+    // Invalidate other socket
+    other.sockfd = 0;
+}
+
+TcpListener& TcpListener::operator=(TcpListener &&other)
+{
+    local = other.local;
+    sockfd = other.sockfd;
+    autoclose = other.autoclose;
+
+    // Invalidate other socket
+    other.sockfd = 0;
+
+    return *this;
 }
 
 void TcpListener::listen(int connectionQueue)

@@ -27,7 +27,26 @@ TcpStream::TcpStream(const std::string &remoteAddressPort)
 
 TcpStream::~TcpStream()
 {
-    close();
+    if (autoclose) close();
+}
+
+TcpStream::TcpStream(TcpStream &&other)
+    : remote{other.remote}, sockfd{other.sockfd}, autoclose{other.autoclose}
+{
+    // Invalidate moved from socket
+    other.sockfd = 0;
+}
+
+TcpStream& TcpStream::operator=(TcpStream &&other)
+{
+    remote = other.remote;
+    sockfd = other.sockfd;
+    autoclose = other.autoclose;
+
+    // Invalidate moved from socket
+    other.sockfd = 0;
+
+    return *this;
 }
 
 void TcpStream::connect()
