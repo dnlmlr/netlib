@@ -40,7 +40,7 @@ private:
     /**
      * @brief If set to true, the socket is automatically closed on destruction
      */
-    bool autoclose = false;
+    bool autoclose = true;
 
 public:
 
