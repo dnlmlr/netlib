@@ -6,6 +6,10 @@
 
 #include "ipaddr.hpp"
 
+namespace netlib
+{
+
+
 /**
  * @brief SockAddr represents the combination of an ip address and a port number.
  * 
@@ -133,5 +137,8 @@ public:
     friend class UdpSocket;
 
 };
+
+
+} // namespace netlib
 
 #endif // _SOCKADDR_HPP

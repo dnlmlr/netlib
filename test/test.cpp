@@ -7,6 +7,7 @@
 
 #include "netlib.hpp"
 
+using namespace netlib;
 
 TEST_CASE("Test IpAddr::V4") {
 

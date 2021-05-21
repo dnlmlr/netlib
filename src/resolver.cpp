@@ -8,6 +8,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
+using namespace netlib;
 
 IpAddr Resolver::resolveHostnameAF(const std::string &hostname, int af)
 {

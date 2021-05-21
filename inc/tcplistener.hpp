@@ -6,6 +6,10 @@
 
 #include <filesystem>
 
+namespace netlib
+{
+
+
 /**
  * @brief Listen to a local ip address + port and accept incomming connections 
  * as TcpStreams.
@@ -112,5 +116,8 @@ public:
     void close();
 
 };
+
+
+} // namespace netlib
 
 #endif // _TCPLISTENER_HPP

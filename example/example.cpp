@@ -5,6 +5,8 @@
 // Include the all-in-one headerfile. This will include all other headers
 #include "netlib.hpp"
 
+using namespace netlib;
+
 void example_IpAddr()
 {
     // IpAddr takes an address as string and automatically detects if it is  

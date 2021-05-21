@@ -5,6 +5,10 @@
 
 #include "ipaddr.hpp"
 
+namespace netlib
+{
+
+
 /**
  * @brief Provide multiple ways to resolve hostnames to Ipv4 and/or Ipv6 
  * addresses.
@@ -111,5 +115,7 @@ public:
 
 };
 
+
+} // namespace netlib
 
 #endif // _RESOLVER_HPP

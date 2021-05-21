@@ -3,6 +3,10 @@
 
 #include "sockaddr.hpp"
 
+namespace netlib
+{
+
+
 /**
  * @brief The UdpSocket can be used to receive UDP packets from and send UDP
  * packets to any target address.
@@ -208,5 +212,8 @@ public:
     void close();
 
 };
+
+
+} // namespace netlib
 
 #endif // _UDPSOCKET_HPP

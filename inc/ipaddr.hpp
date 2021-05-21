@@ -4,6 +4,10 @@
 #include <string>
 #include <netinet/in.h>
 
+namespace netlib
+{
+
+
 /**
  * @brief The IpAddr class represents an ip address that can either be of type
  * Ipv4 or of type Ipv6.
@@ -128,5 +132,8 @@ public:
     friend class Resolver;
 
 };
+
+
+} // namespace netlib
 
 #endif // _IPADDR_HPP

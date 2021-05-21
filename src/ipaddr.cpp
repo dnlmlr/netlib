@@ -5,6 +5,8 @@
 #include <cstring>
 #include <arpa/inet.h>
 
+using namespace netlib;
+
 IpAddr::IpAddr()
     : IpAddr("0.0.0.0")
 { }

@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <poll.h>
 
+using namespace netlib;
 
 UdpSocket::UdpSocket()
     : UdpSocket{"0.0.0.0", 0}

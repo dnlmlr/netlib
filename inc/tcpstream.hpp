@@ -5,6 +5,10 @@
 
 #include "sockaddr.hpp"
 
+namespace netlib
+{
+
+
 /**
  * @brief The TcpStream represents tcp a connection with another endpoint and is
  * used to send and receive data through that connection.
@@ -226,5 +230,7 @@ public:
 
 };
 
+
+} // namespace netlib
 
 #endif // _TCPSTREAM_HPP

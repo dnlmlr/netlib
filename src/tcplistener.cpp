@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
+using namespace netlib;
+
 // TODO: More and better error handling
 
 TcpListener::TcpListener(SockAddr _local)

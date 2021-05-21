@@ -5,6 +5,8 @@
 
 #include <arpa/inet.h>
 
+using namespace netlib;
+
 SockAddr::SockAddr()
     : SockAddr{IpAddr::V4("0.0.0.0"), 0}
 { }

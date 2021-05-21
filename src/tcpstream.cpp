@@ -7,6 +7,8 @@
 #include <netinet/in.h>
 #include <poll.h>
 
+using namespace netlib;
+
 TcpStream::TcpStream(SockAddr _remote)
     : remote{_remote}, sockfd{0}
 { }
