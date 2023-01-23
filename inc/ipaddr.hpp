@@ -1,3 +1,9 @@
+/* Copyright 2023 Daniel M
+ *
+ * Licensed under the MIT license.
+ * This file is part of dnlmlr/netlib project.
+ */
+
 #ifndef _IPADDR_HPP
 #define _IPADDR_HPP
 
