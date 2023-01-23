@@ -15,7 +15,7 @@ behind the scenes.
 
 ## Documentation
 
-Doxygen documentation of the public API is available on [gitlab-pages](https://istddmue2.h-da.io/netlib). 
+Doxygen documentation of the public API can be rendered.
 
 Some examples using the library are available in the `example` subdirectory.
 
