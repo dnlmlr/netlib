@@ -17,11 +17,11 @@
 using namespace netlib;
 
 TcpStream::TcpStream()
-    : remote{SockAddr{IpAddr::V4("0.0.0.0"), 0}}, socket{std::make_shared<TcpSocketWrapper>(TcpSocketWrapper{})}
+    : remote{SockAddr{IpAddr::V4("0.0.0.0"), 0}}, socket{nullptr}
 { }
 
 TcpStream::TcpStream(SockAddr _remote)
-    : remote{_remote}, socket{std::make_shared<TcpSocketWrapper>(TcpSocketWrapper{})}
+    : remote{_remote}, socket{nullptr}
 { }
     
 TcpStream::TcpStream(IpAddr remoteAddress, uint16_t port)
@@ -56,14 +56,19 @@ TcpStream& TcpStream::operator=(TcpStream &&other)
 
 void TcpStream::setRemote(SockAddr remote)
 {
-    if (socket->isValid())
+    if (isSocketValid())
         throw std::runtime_error("Can't change remote while having an open socket");
     this->remote = remote;
 }
 
+bool TcpStream::isSocketValid() const
+{
+    return (socket != nullptr) && socket->isValid();
+}
+
 void TcpStream::connect()
 {
-    if (socket->isValid())
+    if (isSocketValid())
         throw std::runtime_error("Can't call connect on open socket");
 
     int af;
@@ -132,7 +137,9 @@ void TcpStream::connect(SSL_CTX *ctx)
 
 void TcpStream::close()
 {
-    if (socket->isValid())
+    if (socket == nullptr) return;
+
+    if (isSocketValid())
     {
         socket->close();
     }
@@ -140,7 +147,7 @@ void TcpStream::close()
 
 ssize_t TcpStream::send(const void *data, size_t len)
 {
-    if (!socket->isValid())
+    if (!isSocketValid())
         throw std::runtime_error("Can't write to closed socket");
     
     ssize_t bytes_sent = socket->write(data, len);
@@ -156,7 +163,7 @@ ssize_t TcpStream::send(const void *data, size_t len)
 
 void TcpStream::sendAll(const void *data, size_t len)
 {
-    if (!socket->isValid())
+    if (!isSocketValid())
         throw std::runtime_error("Can't write to closed socket");
     
     size_t bytesSentTotal = 0;
@@ -182,7 +189,7 @@ void TcpStream::sendAllString(const std::string &str)
 
 ssize_t TcpStream::read(void *data, size_t len)
 {
-    if (!socket->isValid())
+    if (!isSocketValid())
         throw std::runtime_error("Can't read from closed socket");
 
     ssize_t bytes_read = socket->read(data, len);
@@ -196,7 +203,7 @@ ssize_t TcpStream::read(void *data, size_t len)
 
 ssize_t TcpStream::readAll(void *data, size_t len)
 {
-    if (!socket->isValid())
+    if (!isSocketValid())
         throw std::runtime_error("Can't read from closed socket");
     
     size_t bytesReadTotal = 0;
@@ -220,7 +227,7 @@ ssize_t TcpStream::readTimeout(void *data, size_t len, int timeoutMs)
 {
     if (timeoutMs <= 0) return read(data, len);
 
-    if (!socket->isValid())
+    if (!isSocketValid())
         throw std::runtime_error("Can't read from closed socket");
 
     pollfd pfd;
@@ -255,7 +262,7 @@ ssize_t TcpStream::readAllTimeout(void *data, size_t len, int timeoutMs)
 {
     if (timeoutMs <= 0) return readAll(data, len);
 
-    if (!socket->isValid())
+    if (!isSocketValid())
         throw std::runtime_error("Can't read from closed socket");
     
     pollfd pfd;
@@ -302,7 +309,7 @@ const SockAddr & TcpStream::getRemoteAddr() const
 
 bool TcpStream::isClosed() const
 {
-    return !socket->isValid();
+    return !isSocketValid();
 }
 
 void TcpStream::setAutoclose(bool _autoclose)

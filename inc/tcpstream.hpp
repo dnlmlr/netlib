@@ -43,6 +43,13 @@ private:
      */
     bool autoclose = true;
 
+    /**
+     * @brief Check if the underlying socket filedescriptor is set to non-zero. This is currently
+     * the same as !isClosed(), but the isClosed() function might be extended to verify that the
+     * connection is actually open / closed.
+    */
+    bool isSocketValid() const;
+
 public:
 
     /**
