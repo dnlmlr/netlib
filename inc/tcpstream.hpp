@@ -257,6 +257,16 @@ public:
      */
     const SockAddr & getRemoteAddr() const;
 
+#ifdef NETLIB_SSL
+
+    /**
+     * @brief Get a pointer to the raw SSL object. This does not increment the SSL refcount for 
+     * that SSL object and is therefore not safe to store for later use.
+     */
+    const SSL *getSSL() const; 
+
+#endif // NETLIB_SSL
+
     /**
      * @brief Check if the socket is closed or open. Open in this case means 
      * connected to the remote.

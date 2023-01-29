@@ -307,6 +307,18 @@ const SockAddr & TcpStream::getRemoteAddr() const
     return remote;
 }
 
+#ifdef NETLIB_SSL
+
+const SSL *TcpStream::getSSL() const
+{
+    if (!isSocketValid())
+    {
+        return nullptr;
+    }
+    return socket->ssl;
+}
+#endif // NETLIB_SSL
+
 bool TcpStream::isClosed() const
 {
     return !isSocketValid();
