@@ -165,7 +165,7 @@ const std::string & SockAddr::getIpAddressString() const
     return address.getAddressString();
 }
 
-const uint16_t SockAddr::getPort() const
+uint16_t SockAddr::getPort() const
 {
     return port;
 }

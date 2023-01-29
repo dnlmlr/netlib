@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include <unistd.h>
+#include <cstring>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <poll.h>
@@ -211,7 +212,9 @@ ssize_t TcpStream::readTimeout(void *data, size_t len, int timeoutMs)
     if (!socket->isValid())
         throw std::runtime_error("Can't read from closed socket");
 
-    pollfd pfd = {0};
+    pollfd pfd;
+    std::memset(&pfd, 0, sizeof(pollfd));
+
     pfd.fd = socket->sockfd;
     pfd.events = POLLIN;
     
@@ -244,7 +247,9 @@ ssize_t TcpStream::readAllTimeout(void *data, size_t len, int timeoutMs)
     if (!socket->isValid())
         throw std::runtime_error("Can't read from closed socket");
     
-    pollfd pfd = {0};
+    pollfd pfd;
+    std::memset(&pfd, 0, sizeof(pollfd));
+
     pfd.fd = socket->sockfd;
     pfd.events = POLLIN;
     

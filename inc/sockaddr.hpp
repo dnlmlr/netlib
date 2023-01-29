@@ -136,7 +136,7 @@ public:
     /**
      * @brief Get the port number.
      */
-    const uint16_t getPort() const;
+    uint16_t getPort() const;
 
     friend class TcpStream;
     friend class TcpListener;

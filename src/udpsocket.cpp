@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include <unistd.h>
+#include <cstring>
 #include <sys/socket.h>
 #include <poll.h>
 
@@ -126,7 +127,8 @@ ssize_t UdpSocket::sendTo(const std::string &remoteAddrPort, const void *data, s
 
 ssize_t UdpSocket::receive(void *data, size_t len, SockAddr &remote)
 {
-    SockAddr::RawSockAddr remote_raw_saddr = {0};
+    SockAddr::RawSockAddr remote_raw_saddr;
+    std::memset(&remote_raw_saddr, 0, sizeof(SockAddr::RawSockAddr));
     socklen_t remote_raw_socklen = raw_socklen;
 
     // TODO: Lookup flags
@@ -150,10 +152,13 @@ ssize_t UdpSocket::receive(void *data, size_t len)
 
 ssize_t UdpSocket::receiveTimeout(void *data, size_t len, SockAddr &remote, int timeoutMs)
 {
-    SockAddr::RawSockAddr remote_raw_saddr = {0};
+    SockAddr::RawSockAddr remote_raw_saddr;
+    std::memset(&remote_raw_saddr, 0, sizeof(SockAddr::RawSockAddr));
     socklen_t remote_raw_socklen = raw_socklen;
 
-    pollfd pfd = {0};
+    pollfd pfd;
+    std::memset(&pfd, 0, sizeof(pollfd));
+
     pfd.fd = sockfd;
     pfd.events = POLLIN;
     

@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include <unistd.h>
+#include <cstring>
 #include <sys/socket.h>
 
 using namespace netlib;
@@ -106,7 +107,8 @@ void TcpListener::listen(int connectionQueue)
 
 TcpStream TcpListener::accept()
 {
-    SockAddr::RawSockAddr remote_raw_saddr = {0};
+    SockAddr::RawSockAddr remote_raw_saddr;
+    std::memset(&remote_raw_saddr, 0, sizeof(SockAddr::RawSockAddr));
     socklen_t remote_raw_saddr_len = sizeof(remote_raw_saddr);
 
     int remote_sockfd = ::accept(sockfd, &remote_raw_saddr.generic, &remote_raw_saddr_len);

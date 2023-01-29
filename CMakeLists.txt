@@ -26,3 +26,5 @@ add_custom_target(example example.run)
 add_executable(test.run EXCLUDE_FROM_ALL test/test.cpp)
 target_link_libraries(test.run netlib)
 add_custom_target(test test.run)
+
+target_compile_options(netlib PRIVATE -Wall -Wextra -Wpedantic)
