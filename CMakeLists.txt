@@ -10,6 +10,13 @@ include_directories(inc)
 add_library(netlib STATIC ${SRC_FILES} ${HEADER_FILES})
 set_target_properties(netlib PROPERTIES PREFIX "")
 
+option(NETLIB_SSL "Enable OpenSSL support" OFF)
+
+if(NETLIB_SSL)
+    add_definitions(-DNETLIB_SSL=1)
+    find_package(OpenSSL REQUIRED)
+    target_link_libraries(netlib OpenSSL::SSL)
+endif()
 
 add_executable(example.run EXCLUDE_FROM_ALL example/example.cpp)
 target_link_libraries(example.run netlib)

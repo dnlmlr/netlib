@@ -8,8 +8,10 @@
 #define _TCPSTREAM_HPP
 
 #include <string>
+#include <memory>
 
 #include "sockaddr.hpp"
+#include "tcpsocketwrapper.hpp"
 
 namespace netlib
 {
@@ -31,10 +33,10 @@ private:
     SockAddr remote;
 
     /**
-     * @brief The filedescriptor of the current socket. If this is 0, the socket
-     * is closed.
+     * @brief The filedescriptor of the current socket. If this socket wrapper is marked
+     * as invalid, the connection is considered closed.
      */
-    int sockfd;
+    std::shared_ptr<TcpSocketWrapper> socket;
 
     /**
      * @brief If set to true, the socket is automatically closed on destruction
@@ -99,6 +101,13 @@ public:
      * @brief Connect to the remote socket address specified in the constructor.
      */
     void connect();
+
+#ifdef NETLIB_SSL
+    /**
+     * @brief Connect to the remote socket address specified in the constructor using TLS.
+     */
+    void connect(SSL_CTX *ctx);
+#endif // NETLIB_SSL
 
     /**
      * @brief Close the listening socket. After this, the TcpStream can no 

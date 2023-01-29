@@ -121,7 +121,7 @@ TcpStream TcpListener::accept()
     // Create a TcpStream and set the remote SockAddr
     TcpStream stream(remote_saddr);
     // Transfer the socket filedescriptor
-    stream.sockfd = remote_sockfd;
+    stream.socket->sockfd = remote_sockfd;
 
     // TcpStream can't be copied, so this has to move
     return stream;

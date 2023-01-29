@@ -175,14 +175,68 @@ void example_resolver()
     
 }
 
+void example_tls()
+{
+#ifdef NETLIB_SSL
+    char buffer[10 * 1024];
+
+    // SSL Context creation
+    const SSL_METHOD *method = TLS_client_method();
+	SSL_CTX *ctx = SSL_CTX_new(method);
+	SSL_CTX_load_verify_locations(ctx, NULL, "/etc/ssl/certs");
+
+    // Create stream to cloudflare 1.1.1.1 server on HTTPS port
+    TcpStream tcp("1.1.1.1:443");
+    // Connect using TLS
+    tcp.connect(ctx);
+
+    // Send raw HTTP HEAD reauest
+    tcp.sendAllString("HEAD / HTTP/1.1\r\nHost: 1.1.1.1\r\n\r\n");
+
+    // Read the response. This should be the HEAD response
+    ssize_t nread = tcp.readAllTimeout(buffer, 10 * 1024 - 1, 1000);
+    buffer[nread] = '\0';
+
+
+    std::cout 
+        << "==================== HTTP RESPONSE ====================\n" 
+        << buffer 
+        << "\n==================== HTTP RESPONSE ====================\n" ;
+#else // NETLIB_SSL
+    std::cout << "Skipping SSL example since NETLIB_SSL is not set!" << std::endl;
+#endif // NETLIB_SSL
+}
+
 int main(int argc, char **argv)
 {
     
-    example_IpAddr();
-
-    example_SockAddr();
-
-    example_resolver();
+    try {
+        example_IpAddr();
+    } catch(const std::exception& e) {
+        std::cout << "Unexpected exception during example_IpAdddr()\n"
+            << e.what() << "\n\n";
+    }
+    
+    try {
+        example_SockAddr();
+    } catch(const std::exception& e) {
+        std::cout << "Unexpected exception during example_SockAddr()\n"
+            << e.what() << "\n\n";
+    }
+    
+    try {
+        example_resolver();
+    } catch(const std::exception& e) {
+        std::cout << "Unexpected exception during example_resolver()\n"
+            << e.what() << "\n\n";
+    }
+    
+    try {
+        example_tls();
+    } catch(const std::exception& e) {
+        std::cout << "Unexpected exception during example_tls()\n"
+            << e.what() << "\n\n";
+    }
 
     return 0;
 }
