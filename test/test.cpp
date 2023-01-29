@@ -201,7 +201,7 @@ TEST_CASE("Test SockAddr from raw_sockaddr") {
 
 
 // This test requires internet and a working dns config
-TEST_CASE("Test Resolver") {
+TEST_CASE("Test Resolver IPv4 (fails without working IPv4)") {
 
     IpAddr ip4 = Resolver::resolveHostnameIpv4("one.one.one.one");
 
@@ -213,20 +213,6 @@ TEST_CASE("Test Resolver") {
         || 
         ip4.getAddressString() == "1.0.0.1"
     ));
-
-
-    IpAddr ip6 = Resolver::resolveHostnameIpv6("one.one.one.one");
-
-    CHECK( ip6.type == IpAddr::Type::V6 );
-
-    // The hostname can resolve to either 2606:4700:4700::1111 or the fallback 
-    // 2606:4700:4700::1001
-    CHECK((
-        ip6.getAddressString() == "2606:4700:4700::1111" 
-        || 
-        ip6.getAddressString() == "2606:4700:4700::1001"
-    ));
-
 
     std::vector<IpAddr> ips = Resolver::resolveHostnameAll("one.one.one.one");
 
@@ -249,25 +235,42 @@ TEST_CASE("Test Resolver") {
     ) != ips.end();
 
     CHECK( found2 == true );
+}
+
+
+// This test requires internet and a working dns config
+TEST_CASE("Test Resolver IPv6 (fails without working IPv6)") {
+    IpAddr ip6 = Resolver::resolveHostnameIpv6("one.one.one.one");
+
+    CHECK( ip6.type == IpAddr::Type::V6 );
+
+    // The hostname can resolve to either 2606:4700:4700::1111 or the fallback 
+    // 2606:4700:4700::1001
+    CHECK((
+        ip6.getAddressString() == "2606:4700:4700::1111" 
+        || 
+        ip6.getAddressString() == "2606:4700:4700::1001"
+    ));
+
+    std::vector<IpAddr> ips = Resolver::resolveHostnameAll("one.one.one.one");
 
     // Search for 2606:4700:4700::1111
-    bool found3 = std::find_if(
+    bool found1 = std::find_if(
         ips.begin(), ips.end(), 
         [](const IpAddr &first) {
             return first.str_addr == "2606:4700:4700::1111";
         }
     ) != ips.end();
 
-    CHECK( found3 == true );
+    CHECK( found1 == true );
 
     // Search for 2606:4700:4700::1001
-    bool found4 = std::find_if(
+    bool found2 = std::find_if(
         ips.begin(), ips.end(), 
         [](const IpAddr &first) {
             return first.str_addr == "2606:4700:4700::1001";
         }
     ) != ips.end();
 
-    CHECK( found4 == true );
-
+    CHECK( found2 == true );
 }
