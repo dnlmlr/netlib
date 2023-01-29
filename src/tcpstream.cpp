@@ -16,6 +16,10 @@
 
 using namespace netlib;
 
+TcpStream::TcpStream()
+    : remote{SockAddr{IpAddr::V4("0.0.0.0"), 0}}, socket{std::make_shared<TcpSocketWrapper>(TcpSocketWrapper{})}
+{ }
+
 TcpStream::TcpStream(SockAddr _remote)
     : remote{_remote}, socket{std::make_shared<TcpSocketWrapper>(TcpSocketWrapper{})}
 { }
@@ -48,6 +52,13 @@ TcpStream& TcpStream::operator=(TcpStream &&other)
     autoclose = other.autoclose;
 
     return *this;
+}
+
+void TcpStream::setRemote(SockAddr remote)
+{
+    if (socket->isValid())
+        throw std::runtime_error("Can't change remote while having an open socket");
+    this->remote = remote;
 }
 
 void TcpStream::connect()

@@ -46,6 +46,12 @@ private:
 public:
 
     /**
+     * @brief Create a TcpStream with the remote address set to 0.0.0.0:0 . Since the port 0 is not
+     * valid, this TcpStream will fail to connect before changing the remote to a valid SockAddr.
+     */
+    TcpStream();
+
+    /**
      * @brief Create a TcpStream that will connect to the specified remote 
      * socket address.
      * 
@@ -96,6 +102,12 @@ public:
      * @brief Copying TcpListener is not allowed. See clone() for explicit copies.
      */
     TcpStream& operator=(const TcpStream &other) = delete;
+
+    /**
+     * @brief Set the remote address to the specified value. This will fail if the TcpStream is 
+     * currently connected.
+     */
+    void setRemote(SockAddr remote);
 
     /**
      * @brief Connect to the remote socket address specified in the constructor.
